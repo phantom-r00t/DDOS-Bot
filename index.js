@@ -372,7 +372,13 @@ client.on('interactionCreate', async interaction => {
     const rest = new REST({ version: '10' }).setToken(config.token);
     try {
         console.log('Started refreshing application (/) commands.');
-        await rest.put(Routes.applicationCommands(config.clientId), { body: commandData });
+        await rest.put(
+            Routes.applicationGuildCommands(
+                config.clientId,
+                process.env.DISCORD_GUILD_ID
+            ),
+            { body: commandData }
+        );
         console.log('Successfully reloaded application (/) commands.');
         console.log("Available Command : " )
     } catch (error) {
