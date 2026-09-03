@@ -370,20 +370,28 @@ client.on('interactionCreate', async interaction => {
     await sequelize.sync();
 
     const rest = new REST({ version: '10' }).setToken(config.token);
+
     try {
         console.log('Started refreshing application (/) commands.');
+        console.log('Client ID:', config.clientId);
+        console.log('Guild ID:', process.env.DISCORD_GUILD_ID);
+
         await rest.put(
             Routes.applicationGuildCommands(
                 config.clientId,
                 process.env.DISCORD_GUILD_ID
             ),
-            { body: commandData }
+            {
+                body: commandData.map(command => command.toJSON())
+            }
         );
-        console.log('Successfully reloaded application (/) commands.');
-        console.log("Available Command : " )
+
+        console.log('Successfully reloaded GUILD commands.');
+        console.log('Available Commands:', commandData.length);
+
     } catch (error) {
-        console.error(error);
+        console.error('Command registration error:', error);
     }
 
-    client.login(config.token);
+    await client.login(config.token);
 })();
