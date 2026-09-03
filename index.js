@@ -3,8 +3,10 @@ import { exec } from 'child_process';
 import { Sequelize, DataTypes } from 'sequelize';
 import fs from 'fs';
 
-const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
-
+const config = {
+    token: process.env.DISCORD_TOKEN,
+    clientId: process.env.DISCORD_CLIENT_ID
+};
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
